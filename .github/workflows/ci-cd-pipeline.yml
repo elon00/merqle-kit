@@ -1,5 +1,10 @@
-﻿name: CI/CD Pipeline
+name: CI/CD Pipeline
 on: [push, pull_request]
+
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -11,5 +16,9 @@ jobs:
           python-version: '3.11'
       - name: Smoke Tests
         run: python tests/reality_check_harness.py
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v3
